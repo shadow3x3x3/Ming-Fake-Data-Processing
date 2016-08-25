@@ -18,6 +18,7 @@ class Graph
     initialize_edges(raw_edges) unless raw_edges.nil?
 
     @neighbors_hash = set_neighbors
+    @edges_hash     = set_edges_hash
   end
 
   def add_node(node)
@@ -34,7 +35,11 @@ class Graph
   end
 
   def combination_shorest_path
-    find_combination_by_nodes(@nodes)
+    find_combination_by_nodes(@nodes).each do |c|
+      puts "#{c[0]} -> #{c[1]}: dist: #{shorest_path_query(c[0], c[1], 0)}"
+      puts "#{c[0]} -> #{c[1]}: hops: #{shorest_path_query(c[0], c[1], 1)}"
+    end
+
   end
 
   private
@@ -79,6 +84,15 @@ class Graph
     when edge.dst
       return edge.src
     end
+  end
+
+  def set_edges_hash
+    e_hash = {}
+    @edges.each do |edge|
+      e_hash[[edge.src, edge.dst]] = edge
+      e_hash[[edge.dst, edge.src]] = edge
+    end
+    e_hash
   end
 
   def find_edge(src, dst)
