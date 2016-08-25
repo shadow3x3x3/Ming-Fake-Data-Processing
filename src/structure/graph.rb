@@ -48,7 +48,6 @@ class Graph
     OutputUtil.output_setting_csv("./output/fake_dist.csv", dists)
     hops = edges.map { |e| e.hops }
     OutputUtil.output_setting_csv("./output/fake_hops.csv", hops)
-
   end
 
   private
