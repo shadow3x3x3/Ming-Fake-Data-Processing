@@ -20,6 +20,7 @@ class Graph
 
     @neighbors_hash = set_neighbors
     @edges_hash     = set_edges_hash
+    @start_codes = []
   end
 
   def add_node(node)
@@ -37,15 +38,29 @@ class Graph
 
   def combination_shorest_path
     find_combination_by_nodes(@nodes).each do |c|
-      dist_path = path_2_edges(shorest_path_query(c[0], c[1], 0))
-      hops_path = path_2_edges(shorest_path_query(c[0], c[1], 1))
-      puts "#{c[0]} -> #{c[1]}: dist: #{edges_to_start_codes(dist_path)}"
-      puts "#{c[0]} -> #{c[1]}: hops: #{edges_to_start_codes(hops_path)}"
+      shorest_dist = shorest_path_query(c[0], c[1], 0)
+      shorest_hops = shorest_path_query(c[0], c[1], 1)
+
+      dist_path = path_2_edges(shorest_dist)
+      hops_path = path_2_edges(shorest_hops)
+
+
+      dist_path_attr = calc_path_attrs(shorest_dist)
+      dist_days = to_day(dist_path_attr[0], dist_path_attr[1])
+
+      hops_path_attr = calc_path_attrs(shorest_hops)
+      hops_days = to_day(hops_path_attr[0], hops_path_attr[1])
+
+      @start_codes << [edges_to_start_codes(dist_path), dist_days.to_s].flatten
+      @start_codes << [edges_to_start_codes(hops_path), hops_days.to_s].flatten
     end
-    output_csv(@edges)
+    output_csv(@start_codes, @edges)
+    @start_codes
   end
 
-  def output_csv(edges)
+  def output_csv(start_codes, edges)
+    OutputUtil.output_start_codes_csv("./output/fake_start_code.csv", start_codes)
+
     dists = edges.map { |e| e.dist }
     OutputUtil.output_setting_csv("./output/fake_dist.csv", dists)
     hops = edges.map { |e| e.hops }
@@ -155,6 +170,14 @@ class Graph
     coding = "00000000000000000000"
     edges.each { |chr| coding[chr.to_i] = "1" }
     coding.split("")
+  end
+
+  def calc_path_attrs(path)
+    result_attrs = partition(path).inject([0, 0]) do |attrs, edge|
+      n_edge = find_edge(edge[0], edge[1])
+      attrs = [attrs[0] + n_edge.dist, attrs[1] + n_edge.hops ]
+    end
+    result_attrs
   end
 
   def to_day(dist, hops)

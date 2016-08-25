@@ -13,7 +13,7 @@ class Edge
   end
 
   def attrs
-    [@dist, @hops, @norm_dist_hop]
+    [@dist, @hops]
   end
 
   private
