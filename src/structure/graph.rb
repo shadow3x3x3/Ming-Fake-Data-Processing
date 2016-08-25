@@ -1,6 +1,7 @@
 require_relative '../../lib/dijkstra'
 
 require_relative '../util/read_util'
+require_relative '../util/output_util'
 require_relative 'edge'
 
 # Normal Graph class
@@ -39,6 +40,14 @@ class Graph
       puts "#{c[0]} -> #{c[1]}: dist: #{shorest_path_query(c[0], c[1], 0)}"
       puts "#{c[0]} -> #{c[1]}: hops: #{shorest_path_query(c[0], c[1], 1)}"
     end
+    output_csv(@edges)
+  end
+
+  def output_csv(edges)
+    dists = edges.map { |e| e.dist }
+    OutputUtil.output_setting_csv("./output/fake_dist.csv", dists)
+    hops = edges.map { |e| e.hops }
+    OutputUtil.output_setting_csv("./output/fake_hops.csv", hops)
 
   end
 
