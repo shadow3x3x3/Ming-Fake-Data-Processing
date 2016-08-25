@@ -3,7 +3,7 @@ class Edge
   attr_reader :id, :src, :dst, :dist, :hops, :norm_dist_hop
 
   def initialize(attrs, dim_times_array = nil)
-    @id   = attrs.shift.to_s
+    @id   = attrs.shift.to_i
     @src  = attrs.shift.to_i
     @dst  = attrs.shift.to_i
     @dist = attrs.shift.to_i

@@ -37,8 +37,10 @@ class Graph
 
   def combination_shorest_path
     find_combination_by_nodes(@nodes).each do |c|
-      puts "#{c[0]} -> #{c[1]}: dist: #{path_2_edges(shorest_path_query(c[0], c[1], 0))}"
-      puts "#{c[0]} -> #{c[1]}: hops: #{path_2_edges(shorest_path_query(c[0], c[1], 1))}"
+      dist_path = path_2_edges(shorest_path_query(c[0], c[1], 0))
+      hops_path = path_2_edges(shorest_path_query(c[0], c[1], 1))
+      puts "#{c[0]} -> #{c[1]}: dist: #{edges_to_start_codes(dist_path)}"
+      puts "#{c[0]} -> #{c[1]}: hops: #{edges_to_start_codes(hops_path)}"
     end
     output_csv(@edges)
   end
@@ -147,5 +149,11 @@ class Graph
       result << c
     end
     result
+  end
+
+  def edges_to_start_codes(edges)
+    coding = "00000000000000000000"
+    edges.each { |chr| coding[chr.to_i] = "1" }
+    coding.split("")
   end
 end
