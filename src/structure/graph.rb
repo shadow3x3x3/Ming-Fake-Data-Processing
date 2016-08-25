@@ -33,6 +33,10 @@ class Graph
     @neighbors_hash[node]
   end
 
+  def combination_shorest_path
+    find_combination_by_nodes(@nodes)
+  end
+
   private
 
   def duplicate_edge?(new_edge)
@@ -89,6 +93,20 @@ class Graph
     result = []
     0.upto(path.size - 2) do |i|
       result << [path[i], path[i + 1]]
+    end
+    result
+  end
+
+  def find_combination_by_nodes(nodes)
+    combs = nodes.repeated_combination(2).to_a.delete_if { |c| c[0] == c[1] }
+
+    temp_array = [] # for delete duplicates edges
+    result = []
+    combs.each do |c|
+      next if temp_array.include?([c[1], c[0]])
+      next if temp_array.include?([c[0], c[1]])
+      temp_array << [c[0], c[1]]
+      result << c
     end
     result
   end
