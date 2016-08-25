@@ -156,4 +156,8 @@ class Graph
     edges.each { |chr| coding[chr.to_i] = "1" }
     coding.split("")
   end
+
+  def to_day(dist, hops)
+    (((dist / 50) + hops) / 2 + rand(-0.5..0.5)).round(2)
+  end
 end
