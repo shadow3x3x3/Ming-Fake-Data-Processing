@@ -37,6 +37,8 @@ class Graph
   end
 
   def combination_shorest_path
+    edges =[]
+
     find_combination_by_nodes(@nodes).each do |c|
       shorest_dist = shorest_path_query(c[0], c[1], 0)
       shorest_hops = shorest_path_query(c[0], c[1], 1)
@@ -53,8 +55,12 @@ class Graph
 
       @start_codes << [edges_to_start_codes(dist_path), dist_days.to_s].flatten
       @start_codes << [edges_to_start_codes(hops_path), hops_days.to_s].flatten
+
+      edges << "#{c[0]}-#{c[1]}-#{shorest_dist}"
+      edges << "#{c[0]}-#{c[1]}-#{shorest_hops}"
     end
     output_csv(@start_codes, @edges)
+    output_txt(edges)
     @start_codes
   end
 
@@ -65,6 +71,10 @@ class Graph
     OutputUtil.output_setting_csv("./output/fake_dist.csv", dists)
     hops = edges.map { |e| e.hops }
     OutputUtil.output_setting_csv("./output/fake_hops.csv", hops)
+  end
+
+  def output_txt(edges)
+    OutputUtil.output_txt("./output/edges.txt", edges)
   end
 
   private

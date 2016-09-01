@@ -20,4 +20,10 @@ module OutputUtil
       csv << dataset
     end
   end
+
+  def self.output_txt(path, dataset)
+    File.open(path, "w") do |f|
+      dataset.each { |l| f.write(l + "\n") }
+    end
+  end
 end
